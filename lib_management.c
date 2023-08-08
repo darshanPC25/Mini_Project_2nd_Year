@@ -27,7 +27,6 @@ struct borrower{
 struct borrowbook{
     char borrower_id[15];
     char book_id[15];
-    DATE;
 };
 
 int main(){
