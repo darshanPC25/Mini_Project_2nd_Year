@@ -14,7 +14,7 @@ void disborrower();
 
 
 struct book{
-    char book_id[10];
+    char book_id[15];
     char book_name[200];
     char book_author[75];
 };
@@ -24,6 +24,11 @@ struct borrower{
     char borr_name[100];
 };
 
+struct borrowbook{
+    char borrower_id[15];
+    char book_id[15];
+    DATE;
+};
 
 int main(){
     system("cls");
