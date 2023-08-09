@@ -4,33 +4,38 @@
 #include<string.h>
 #include<windows.h>
 
-void gotoxy(int,int);
-void menu();
-void addbook();
-void searchbook();
-void disbook();
-void addborrower();
-void disborrower();
+void gotoxy(int,int);                   //Function created for cursor position
+void menu();                            //Function for main menu
+void addbook();                         //Function for add a book
+void searchbook();                      //Function for searching book
+void disbook();                         //Function for display all books 
+void addborrower();                     //function for add borrower details
+void disborrower();                     //Function for Display all Borrower
+void borobook();
 
-
-struct book{
+struct book{                            //structure for book details
     char book_id[15];
     char book_name[200];
     char book_author[75];
 };
 
-struct borrower{
+struct borrower{                        //structure for borrower detaile
     char borr_id[15];
     char borr_name[100];
+    int p_no;
 };
 
 struct borrowbook{
     char borrower_id[15];
+    char borrower_name[100];
     char book_id[15];
+    char book_name[200];
+    char book_author[75];
+    char date_of_issue[10];
 };
 
 int main(){
-    system("cls");
+    system("cls");                      //system("cls"); do clear a terminal screen
     gotoxy(15,8);
     printf("|<><><><><><><><>:LIBRARY MANAGEMENT SYSTEM:<><><><><><><><>|");
     gotoxy(33,15);
@@ -113,7 +118,7 @@ void addbook(){
         exit(1);
     }
     fflush(stdin);
-    while(yes=='y'){
+    while(yes=='y'||yes=='Y'){
         gotoxy(10,3);
         printf("<--:ADD A BOOK:-->");
         gotoxy(10,5);
@@ -169,6 +174,7 @@ void searchbook(){
             gotoxy(10,10);
             printf("Author of Book: %s",bok.book_author);
         }
+        
     }
     fclose(fp);
     gotoxy(10,16);
@@ -221,7 +227,7 @@ void addborrower(){
         exit(1);
     }
     fflush(stdin);
-    while(yes=='y'){
+    while(yes=='y'||yes=='Y'){
         gotoxy(10,3);
         printf("<--:ADD A BORROWER:-->");
         gotoxy(10,5);
@@ -277,6 +283,47 @@ void disborrower(){
     getch();
     menu();
 }
+
+void borobook(){
+    FILE *fp,*fp1,*fp2;
+    struct borrowbook borbok;
+    char yes='y';
+    system("cls");
+
+    fp = fopen("BorrowRecord.txt","ab+");
+    fp1=fopen("BookRecord.txt","rb+");
+    fp2=fopen("BorrowerRecord.txt","rb+");
+
+    if(fp == NULL){
+        gotoxy(10,5);
+        printf("Error for Opening File");
+        exit(1);
+    }
+    fflush(stdin);
+    while(yes=='y'){
+        gotoxy(10,3);
+        printf("<--:BORROW A BOOK:-->");
+        gotoxy(10,5);
+        printf("Enter Borrower ID: ");
+        gets(borbok.borrower_id);
+        gotoxy(10,6);
+        printf("Enter Book ID: ");
+        gets(borbok.book_id);
+        gotoxy(10,7);
+        printf("Enter Date Of Issue: ");
+        gets(borbok.date_of_issue);
+
+        fwrite(&borbok,sizeof(borbok),1,fp);
+    }
+    fclose(fp);
+
+}
+
+
+
+
+
+
 
 
 
