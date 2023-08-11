@@ -55,5 +55,11 @@
   "C_Cpp_Runner.useLeakSanitizer": false,
   "C_Cpp_Runner.showCompilationTime": false,
   "C_Cpp_Runner.useLinkTimeOptimization": false,
-  "cmake.configureOnOpen": false
+  "cmake.configureOnOpen": false,
+  "files.associations": {
+    "string.h": "c",
+    "windows.h": "c",
+    "stdlib.h": "c",
+    "conio.h": "c"
+  }
 }

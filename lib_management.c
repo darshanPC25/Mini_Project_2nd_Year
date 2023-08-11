@@ -12,26 +12,27 @@ void disbook();                         //Function for display all books
 void addborrower();                     //function for add borrower details
 void disborrower();                     //Function for Display all Borrower
 void borobook();
+void returnbook();
+void borrowstat();
 
 struct book{                            //structure for book details
     char book_id[15];
     char book_name[200];
     char book_author[75];
 };
-
 struct borrower{                        //structure for borrower detaile
     char borr_id[15];
     char borr_name[100];
     int p_no;
 };
-
 struct borrowbook{
-    char borrower_id[15];
-    char borrower_name[100];
+    char borr_id[15];
+    char borr_name[100];
     char book_id[15];
     char book_name[200];
     char book_author[75];
     char date_of_issue[10];
+    char status[10];
 };
 
 int main(){
@@ -45,7 +46,6 @@ int main(){
     return 0;
 
 }
-
 void menu(){
     int choice;
     system("cls");
@@ -68,6 +68,8 @@ void menu(){
     gotoxy(10,13);
     printf("7 --> Return a book");
     gotoxy(10,14);
+    printf("8 --> Display Borrow Status");
+    gotoxy(10,15);
     printf("0 --> EXIT");
 
     printf("\n\nEnter Your Choice:\t");
@@ -90,13 +92,15 @@ void menu(){
             disborrower();
             break;
         case 6:
-
+            borobook();
             break;
         case 7:
 
             break;
+        case 8:
+            borrowstat();
+            break;
         case 0:
-
             break;
         default:
             gotoxy(10,17);
@@ -104,7 +108,6 @@ void menu(){
     }
 
 }
-
 void addbook(){
     FILE *fp;
     struct book bok;
@@ -147,7 +150,6 @@ void addbook(){
     getch();
     menu();
 }
-
 void searchbook(){
     FILE *fp;
     struct book bok;
@@ -182,7 +184,6 @@ void searchbook(){
     getch();
     menu();
 }
-
 void disbook(){
     FILE *fp;
     int i=1,j;
@@ -213,7 +214,6 @@ void disbook(){
     getch();
     menu();
 }
-
 void addborrower(){
     FILE *fp;
     struct borrower bor;
@@ -252,14 +252,13 @@ void addborrower(){
     getch();
     menu();
 }
-
 void disborrower(){
     FILE *fp;
     int i=1,j;
     struct borrower bor;
     system("cls");
     gotoxy(10,3);
-    printf("<--ALL Borrowers-->");
+    printf("<--:ALL Borrowers:-->");
     gotoxy(10,5);
     printf("S.No.    Borrower ID          Borrower Name     ");
     gotoxy(10,6);
@@ -283,48 +282,129 @@ void disborrower(){
     getch();
     menu();
 }
-
 void borobook(){
     FILE *fp,*fp1,*fp2;
+    
     struct borrowbook borbok;
+    struct book bok;
+    struct borrower bor;
     char yes='y';
+   // char stat='B';
     system("cls");
 
     fp = fopen("BorrowRecord.txt","ab+");
     fp1=fopen("BookRecord.txt","rb+");
     fp2=fopen("BorrowerRecord.txt","rb+");
 
-    if(fp == NULL){
+    if(fp == NULL && fp1 == NULL && fp2 == NULL){
         gotoxy(10,5);
         printf("Error for Opening File");
         exit(1);
     }
     fflush(stdin);
-    while(yes=='y'){
+    while(yes=='y'||yes=='Y'){
         gotoxy(10,3);
         printf("<--:BORROW A BOOK:-->");
         gotoxy(10,5);
-        printf("Enter Borrower ID: ");
-        gets(borbok.borrower_id);
+        printf("Enter Borrower ID: ");          
+        gets(borbok.borr_id);
+        if(strcmp(borbok.borr_id,bor.borr_id)==0){
+            strcpy(borbok.borr_name,bor.borr_name);
+        }
         gotoxy(10,6);
         printf("Enter Book ID: ");
         gets(borbok.book_id);
+        if(strcmp(borbok.book_id,bok.book_id)==0){
+            strcpy(borbok.book_name,bok.book_name);
+            strcpy(borbok.book_author,bok.book_author);
+        }
         gotoxy(10,7);
         printf("Enter Date Of Issue: ");
         gets(borbok.date_of_issue);
+        
 
         fwrite(&borbok,sizeof(borbok),1,fp);
+        gotoxy(10,15);
+        printf("If You Want to Add More Record Then Press 'y' else press any key");
+        fflush(stdin);
+        yes=getch();
+        system("cls");
+        fflush(stdin);
     }
     fclose(fp);
-
+    fclose(fp1);
+    fclose(fp2);
+    gotoxy(10,16);
+    printf("Press any key to Continue");
+    getch();
+    menu();
 }
 
+// void returnbook(){
+//     char borid[15];
+//     char stat[10]='Returned';
+//     FILE *fp;
+//     struct borrowbook borbok;
+//     system("cls");
+//     gotoxy(10,3);
+//     printf("<--:RETURN A BOOK:-->");
+//     gotoxy(10,5);
+//     printf("Enter Borrower ID: ");
+//     fflush(stdin);
+//     gets(borid);
+//     fp=fopen("BorrowRecord.txt","rb+");
+//     if(fp == NULL){
+//         gotoxy(10,5);
+//         printf("Error for Opening File");
+//         exit(1);
+//     }
+//     rewind(fp);
+//     fflush(stdin);
+//     while(fread(&borbok,sizeof(borbok),1,fp) == 1){
+//         if(strncmp(borid,borbok.borr_id) == 0){
+//             strcpy(borbok.status,stat);
+//             fseek(fp ,-sizeof(borbok),SEEK_CUR);
+//             fwrite(&borbok,sizeof(borbok),1,fp);
+//             break;
+//         }
+//     }
+//     fclose(fp);
+//     gotoxy(10,16);
+//     printf("Press any key to continue."); 
+//     getch();
+//     menu();
+// }
 
-
-
-
-
-
+void borrowstat(){
+    FILE *fp;
+    int i=1,j;
+    struct borrowbook borbok;
+    system("cls");
+    gotoxy(10,3);
+    printf("<--:BORROW STATUS:-->");
+    gotoxy(10,5);
+    printf("S.No.    Borrower ID            Borrower Name                   Book ID          Book Name                    Author                Date of Issue");
+    gotoxy(10,6);
+    printf("-------------------------------------------------------------------------------------------------------------------------------------------------");
+    fp=fopen("BorrowRecord.txt","rb+");
+    if(fp == NULL){
+        gotoxy(10,6);
+        printf("Error for Opening File");
+        exit(1);
+    }
+    j=8;
+    while(fread(&borbok,sizeof(borbok),1,fp)==1){
+        gotoxy(10,j);
+        printf("%-7d%-21s%-30s%-16s%-27s%-20s%-11s",i,borbok.borr_id,borbok.borr_name,borbok.book_id,borbok.book_name,borbok.book_author,borbok.date_of_issue);
+        i++;
+        j++;
+    }
+    fclose(fp);
+    gotoxy(10,j+3);
+    printf("Press any key to Continue");
+    getch();
+    menu();
+}
 
 
 void gotoxy(int x,int y)
