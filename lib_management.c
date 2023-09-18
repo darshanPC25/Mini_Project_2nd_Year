@@ -1,26 +1,28 @@
+//!Library management System
+
 #include<stdio.h>
 #include<conio.h>
 #include<stdlib.h>
 #include<string.h>
 #include<windows.h>
 
-void gotoxy(int,int);                   //Function created for cursor position
-void menu();                            //Function for main menu
-void addbook();                         //Function for add a book
-void searchbook();                      //Function for searching book
-void disbook();                         //Function for display all books 
-void addborrower();                     //function for add borrower details
-void disborrower();                     //Function for Display all Borrower
+void gotoxy(int,int);                   //todo Function created for cursor position
+void addbook();                         //todo Function for add a book
+void searchbook();                      //todo Function for searching book
+void disbook();                         //todo Function for display all books 
+void addborrower();                     //todo function for add borrower details
+void disborrower();                     //todo Function for Display all Borrower
+void menu();                            //todo Function for main menu
 void borobook();
 void returnbook();
 void borrowstat();
 
-struct book{                            //structure for book details
+struct book{                            //todo structure for book details
     char book_id[15];
     char book_name[200];
     char book_author[75];
 };
-struct borrower{                        //structure for borrower detaile
+struct borrower{                        //todo structure for borrower detaile
     char borr_id[15];
     char borr_name[100];
     int p_no;
@@ -36,7 +38,7 @@ struct borrowbook{
 };
 
 int main(){
-    system("cls");                      //system("cls"); do clear a terminal screen
+    system("cls");                      //todo system("cls"); do clear a terminal screen
     gotoxy(15,8);
     printf("|<><><><><><><><>:LIBRARY MANAGEMENT SYSTEM:<><><><><><><><>|");
     gotoxy(33,15);
@@ -291,8 +293,8 @@ void borobook(){
     FILE *fp,*fp1,*fp2;
     
     struct borrowbook borbok;
-    struct book bok;
-    struct borrower bor;
+    // struct book bok;
+    // struct borrower bor;
     char yes='y';
    // char stat='B';
     system("cls");
@@ -402,6 +404,7 @@ void returnbook(){
     while(fread(&borbok,sizeof(borbok),1,fp)==1){
         if(strcmp(borid,borbok.borr_id)!=0 && strcmp(bokid,borbok.book_id)!=0){
             fwrite(&borbok,sizeof(borbok),1,fr);
+            break;
         }
     }
     fclose(fp);
